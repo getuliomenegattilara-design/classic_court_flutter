@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter_android/webview_flutter_android.dart';
 
 void main() {
   runApp(const ClassicCourtApp());
@@ -43,13 +44,19 @@ class _ClassicCourtScreenState extends State<ClassicCourtScreen> {
         onPageFinished: (_) => setState(() => _isLoading = false),
         onWebResourceError: (error) {
           setState(() => _isLoading = false);
-          if (error.errorCode == -400 || error.description.contains('cache')) {
-            _controller.reload();
-          }
+          _controller.reload();
         },
-      ))
-      ..loadRequest(Uri.parse(
-          'https://getuliomenegattilara-design.github.io/ClassicCourt/login.html'));
+      ));
+
+    // Limpa cache no Android
+    if (_controller.platform is AndroidWebViewController) {
+      final androidController = _controller.platform as AndroidWebViewController;
+      androidController.clearCache();
+      androidController.clearLocalStorage();
+    }
+
+    _controller.loadRequest(Uri.parse(
+        'https://getuliomenegattilara-design.github.io/ClassicCourt/login.html'));
   }
 
   @override
