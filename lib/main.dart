@@ -3,6 +3,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const ClassicCourtApp());
 }
 
@@ -37,27 +38,32 @@ class _ClassicCourtScreenState extends State<ClassicCourtScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = WebViewController()
+
+    _controller = WebViewController();
+
+    if (_controller.platform is AndroidWebViewController) {
+      final android = _controller.platform as AndroidWebViewController;
+      AndroidWebViewController.enableDebugging(true);
+      android.setMediaPlaybackRequiresUserGesture(false);
+    }
+
+    _controller
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(NavigationDelegate(
         onPageStarted: (_) => setState(() => _isLoading = true),
         onPageFinished: (_) => setState(() => _isLoading = false),
         onWebResourceError: (error) {
+          debugPrint('WebView error: ${error.errorCode} - ${error.description}');
           setState(() => _isLoading = false);
-          _controller.reload();
         },
-      ));
-
-    // Limpa cache no Android
-    if (_controller.platform is AndroidWebViewController) {
-      final androidController = _controller.platform as AndroidWebViewController;
-      androidController.clearCache();
-      androidController.clearLocalStorage();
-    }
-
-    final ts = DateTime.now().millisecondsSinceEpoch;
-    _controller.loadRequest(Uri.parse(
-        'https://getuliomenegattilara-design.github.io/ClassicCourt/login.html?v=$ts'));
+      ))
+      ..loadRequest(
+        Uri.parse('https://getuliomenegattilara-design.github.io/ClassicCourt/login.html'),
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+        },
+      );
   }
 
   @override
