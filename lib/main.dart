@@ -55,8 +55,9 @@ class _ClassicCourtScreenState extends State<ClassicCourtScreen> {
       androidController.clearLocalStorage();
     }
 
+    final ts = DateTime.now().millisecondsSinceEpoch;
     _controller.loadRequest(Uri.parse(
-        'https://getuliomenegattilara-design.github.io/ClassicCourt/login.html'));
+        'https://getuliomenegattilara-design.github.io/ClassicCourt/login.html?v=$ts'));
   }
 
   @override
