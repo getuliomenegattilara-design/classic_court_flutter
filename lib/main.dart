@@ -41,7 +41,12 @@ class _ClassicCourtScreenState extends State<ClassicCourtScreen> {
       ..setNavigationDelegate(NavigationDelegate(
         onPageStarted: (_) => setState(() => _isLoading = true),
         onPageFinished: (_) => setState(() => _isLoading = false),
-        onWebResourceError: (error) => setState(() => _isLoading = false),
+        onWebResourceError: (error) {
+          setState(() => _isLoading = false);
+          if (error.errorCode == -400 || error.description.contains('cache')) {
+            _controller.reload();
+          }
+        },
       ))
       ..loadRequest(Uri.parse(
           'https://getuliomenegattilara-design.github.io/ClassicCourt/login.html'));
