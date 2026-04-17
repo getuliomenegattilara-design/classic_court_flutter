@@ -129,11 +129,7 @@ class _ClassicCourtScreenState extends State<ClassicCourtScreen> {
   }
 
   void _compartilhar() {
-    SharePlus.instance.share(
-      ShareParams(
-        text: 'Classic Court — Tênis do Classic Boulevard\n$_currentUrl',
-      ),
-    );
+    Share.share('Classic Court — Tênis do Classic Boulevard\n$_currentUrl');
   }
 
   @override
