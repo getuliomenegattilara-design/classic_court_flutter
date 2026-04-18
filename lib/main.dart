@@ -2,14 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:local_auth/local_auth.dart';
+import 'dart:io' show Platform;
 
 const String _homeUrl =
     'https://getuliomenegattilara-design.github.io/ClassicCourt/login.html';
-
-const Map<String, String> _noCache = {
-  'Cache-Control': 'no-cache, no-store, must-revalidate',
-  'Pragma': 'no-cache',
-};
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,7 +40,6 @@ class _ClassicCourtScreenState extends State<ClassicCourtScreen> {
   late final WebViewController _controller;
   bool _isLoading = true;
   bool _hasError = false;
-  bool _clearedCache = false;
   bool _autenticado = false;
   String _currentUrl = _homeUrl;
 
@@ -106,25 +101,15 @@ class _ClassicCourtScreenState extends State<ClassicCourtScreen> {
         },
         onWebResourceError: (error) {
           if (error.isForMainFrame != true) return;
-          if (error.errorCode == -1 && !_clearedCache) {
-            _clearedCache = true;
-            _controller.clearCache().then((_) {
-              _controller.loadRequest(Uri.parse(_homeUrl), headers: _noCache);
-            });
-            return;
-          }
           setState(() { _isLoading = false; _hasError = true; });
         },
       ))
-      ..loadRequest(Uri.parse(_homeUrl), headers: _noCache);
+      ..loadRequest(Uri.parse(_homeUrl));
   }
 
   void _retry() {
     setState(() { _hasError = false; _isLoading = true; });
-    _clearedCache = false;
-    _controller.clearCache().then((_) {
-      _controller.loadRequest(Uri.parse(_homeUrl), headers: _noCache);
-    });
+    _controller.loadRequest(Uri.parse(_homeUrl));
   }
 
   @override

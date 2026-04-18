@@ -58,6 +58,10 @@
 	<false/>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Classic Court usa Face ID para proteger seu acesso ao app.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Classic Court precisa acessar sua galeria para enviar fotos das partidas.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Classic Court precisa acessar a camera para tirar fotos das partidas.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
