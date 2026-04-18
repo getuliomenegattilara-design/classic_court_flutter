@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:share_plus/share_plus.dart';
 
 const String _homeUrl =
     'https://getuliomenegattilara-design.github.io/ClassicCourt/login.html';
@@ -128,10 +127,6 @@ class _ClassicCourtScreenState extends State<ClassicCourtScreen> {
     });
   }
 
-  void _compartilhar() {
-    Share.share('Classic Court — Tênis do Classic Boulevard\n$_currentUrl');
-  }
-
   @override
   Widget build(BuildContext context) {
     if (!_autenticado) {
@@ -213,13 +208,6 @@ class _ClassicCourtScreenState extends State<ClassicCourtScreen> {
           ],
         ),
       ),
-      floatingActionButton: (!_isLoading && !_hasError)
-          ? FloatingActionButton.small(
-              onPressed: _compartilhar,
-              backgroundColor: const Color(0xFF2563EB),
-              child: const Icon(Icons.share, color: Colors.white, size: 20),
-            )
-          : null,
     );
   }
 }
